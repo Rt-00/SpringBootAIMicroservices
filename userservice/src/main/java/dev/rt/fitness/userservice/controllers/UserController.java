@@ -18,6 +18,11 @@ public class UserController {
     this.userService = userService;
   }
 
+  @GetMapping("/{userId}")
+  public ResponseEntity<UserResponse> getUserProfile(@PathVariable String userId) {
+    return ResponseEntity.ok(userService.getUserProfile(userId));
+  }
+
   @PostMapping("/register")
   public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRegisterRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(request));

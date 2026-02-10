@@ -20,6 +20,25 @@ public class UserService {
   }
 
   /**
+   * Retrieves the profile information of a user by its identifier.
+   *
+   * <p>This method looks up the user in the persistence layer and returns
+   * a read-only representation suitable for API responses.</p>
+   *
+   * @param userId the user's ID
+   *
+   * @return the user's profile data as a {#{@link UserResponse}}
+   *
+   * @throws RuntimeException if no user with the given ID is found
+   */
+  public UserResponse getUserProfile(String userId) {
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new RuntimeException("User not found"));
+
+    return UserMapper.toResponse(user);
+  }
+
+  /**
    * Registers a new user in the system.
    *
    * <p>This method verifies email uniqueness, maps the incoming request
