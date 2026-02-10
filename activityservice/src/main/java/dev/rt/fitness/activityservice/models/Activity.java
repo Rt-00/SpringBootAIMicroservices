@@ -62,7 +62,7 @@ public class Activity {
    * distance, pace, heart rate, repetitions, or intensity.</p>
    */
   @Field("metrics")
-  private Map<String, Object> addtionalMetrics;
+  private Map<String, Object> additionalMetrics;
 
   /**
    * Timestamp indicating when the activity document was created.
