@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Represents a physical activity performed by a user.
  */
-@Document(collation = "activities")
+@Document(collection = "activities")
 @Data
 @Builder
 @AllArgsConstructor
