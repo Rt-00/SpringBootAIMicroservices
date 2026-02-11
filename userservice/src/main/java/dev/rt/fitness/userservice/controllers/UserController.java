@@ -47,4 +47,16 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(request));
   }
 
+  /**
+   * Validate if User with specific ID exists.
+   *
+   * @param userId the user's ID
+   *
+   * @return True if user exists and false if user not exists.
+   */
+  @GetMapping("/{userId}/validate")
+  public ResponseEntity<Boolean> validateUser(@PathVariable String userId) {
+    return ResponseEntity.ok(userService.existsByUserId(userId));
+  }
+
 }

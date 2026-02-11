@@ -60,4 +60,15 @@ public class UserService {
 
     return UserMapper.toResponse(savedUser);
   }
+
+  /**
+   * Checks whether a user exists with the given identifier.
+   *
+   * @param userId the unique identifier of the user
+   *
+   * @return {@code true} if a user with the given ID exists, otherwise {@code false}
+   */
+  public Boolean existsByUserId(String userId) {
+    return userRepository.existsById(userId);
+  }
 }

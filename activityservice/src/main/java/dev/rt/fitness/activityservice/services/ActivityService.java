@@ -16,22 +16,33 @@ import java.util.List;
 public class ActivityService {
 
   private final ActivityRepository activityRepository;
+  private final UserValidationService userValidationService;
 
-  public ActivityService(ActivityRepository activityRepository) {
+  public ActivityService(ActivityRepository activityRepository,
+    UserValidationService userValidationService) {
     this.activityRepository = activityRepository;
+    this.userValidationService = userValidationService;
   }
 
   /**
-   * Tracking Activity in the system.
+   * Tracks a new activity in the system.
    *
-   * <p>This method maps the incoming request.
-   * to a domain model, persists it, and returns a respose DTO.</p>
+   * <p>This method validates the user against the user service,
+   * maps the incoming request to a domain model, persists it, and returns a response DTO.</p>
    *
-   * @param request activity creation data.
+   * @param request activity creation data
    *
-   * @return the newly created activity as responsible DTO.
+   * @return the newly created activity as a response DTO
+   *
+   * @throws RuntimeException if the user does not exist or is invalid
    */
   public ActivityResponse trackActivity(ActivityRequest request) {
+    boolean isValidUser = userValidationService.validateUser(request.getUserId());
+
+    if (!isValidUser) {
+      throw new RuntimeException("Invalid User: " + request.getUserId());
+    }
+
     Activity activity = ActivityMapper.toModel(request);
 
     Activity savedActivity = activityRepository.save(activity);
