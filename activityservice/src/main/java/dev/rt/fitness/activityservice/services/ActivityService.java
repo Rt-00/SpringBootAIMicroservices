@@ -7,6 +7,8 @@ import dev.rt.fitness.activityservice.models.Activity;
 import dev.rt.fitness.activityservice.repository.ActivityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Service layer responsible for activity-related business logic.
  */
@@ -35,5 +37,23 @@ public class ActivityService {
     Activity savedActivity = activityRepository.save(activity);
 
     return ActivityMapper.toResponse(savedActivity);
+  }
+
+  /**
+   * Retrieves all activities performed by a given user.
+   *
+   * <p>This method queries the persistence layer for activities associated
+   * with the specified user identifier and maps them to response DTOs.</p>
+   *
+   * @param userId the identifier of the user
+   *
+   * @return a list of activities belonging to the user
+   */
+  public List<ActivityResponse> getUserActivities(String userId) {
+    List<Activity> activities = activityRepository.findByUserId(userId);
+
+    return activities.stream()
+      .map(ActivityMapper::toResponse)
+      .toList();
   }
 }

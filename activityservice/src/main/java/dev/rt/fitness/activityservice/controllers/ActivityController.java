@@ -5,10 +5,9 @@ import dev.rt.fitness.activityservice.dtos.ActivityResponse;
 import dev.rt.fitness.activityservice.services.ActivityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * REST controller responsible fo activity-related endpoints.
@@ -35,5 +34,21 @@ public class ActivityController {
   @PostMapping
   public ResponseEntity<ActivityResponse> trackActivity(@RequestBody ActivityRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(activityService.trackActivity(request));
+  }
+
+  /**
+   * Retrieves all activities associated with a specific user.
+   *
+   * <p>The user identifier is expected to be provided via the
+   * {@code X-USER-ID} request header.</p>
+   *
+   * @param userId the identifier of the user whose activities are requested
+   *
+   * @return a list of activities performed by the user
+   */
+  @GetMapping
+  public ResponseEntity<List<ActivityResponse>> getUserActivities(
+    @RequestHeader("X-USER-ID") String userId) {
+    return ResponseEntity.ok(activityService.getUserActivities(userId));
   }
 }
