@@ -51,4 +51,19 @@ public class ActivityController {
     @RequestHeader("X-USER-ID") String userId) {
     return ResponseEntity.ok(activityService.getUserActivities(userId));
   }
+
+  /**
+   * Retrieves a specific activity by its identifier.
+   *
+   * <p>The activity ID is provided as a path variable. If the activity
+   * exists, its details are returned in the response body.</p>
+   *
+   * @param activityId the unique identifier of the activity
+   *
+   * @return the requested activity as a response DTO
+   */
+  @GetMapping("/{activityId}")
+  public ResponseEntity<ActivityResponse> getActivity(@PathVariable String activityId) {
+    return ResponseEntity.ok(activityService.getActivityById(activityId));
+  }
 }

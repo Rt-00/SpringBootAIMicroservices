@@ -56,4 +56,22 @@ public class ActivityService {
       .map(ActivityMapper::toResponse)
       .toList();
   }
+
+  /**
+   * Retrieves an activity by its identifier.
+   *
+   * <p>This method queries the persistence layer for the activity and maps
+   * it to a response DTO. If no activity is found, an exception is thrown.</p>
+   *
+   * @param activityId the unique identifier of the activity
+   *
+   * @return the activity as a response DTO
+   *
+   * @throws RuntimeException if no activity with the given ID exists
+   */
+  public ActivityResponse getActivityById(String activityId) {
+    return activityRepository.findById(activityId)
+      .map(ActivityMapper::toResponse)
+      .orElseThrow(() -> new RuntimeException("Activity not found with this ID: " + activityId));
+  }
 }
