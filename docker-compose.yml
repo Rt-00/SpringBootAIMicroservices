@@ -1,0 +1,34 @@
+services:
+
+  userservice-postgres:
+    image: postgres:17
+    container_name: userservice-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fitness_user_db
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+    ports:
+      - "5432:5432"
+
+  activityservice-mongo:
+    image: mongo:7
+    container_name: activityservice-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: docker
+      MONGO_INITDB_ROOT_PASSWORD: docker
+      MONGO_INITDB_DATABASE: fitness_activity_db
+
+  aiservice-mongo:
+    image: mongo:7
+    container_name: aiservice-mongo
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: docker
+      MONGO_INITDB_ROOT_PASSWORD: docker
+      MONGO_INITDB_DATABASE: fitness_ai_db
