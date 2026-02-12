@@ -1,5 +1,6 @@
 package dev.rt.fitness.activityservice.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
  * a user exists before allowing activity-related operations.</p>
  */
 @Service
+@Slf4j
 public class UserValidationService {
 
   private final WebClient userServiceWebClient;
@@ -33,6 +35,7 @@ public class UserValidationService {
    * @throws RuntimeException if the user does not exist or the request is invalid
    */
   public boolean validateUser(String userId) {
+    log.info("Calling User Validation API for userID: {}", userId);
     try {
       return Boolean.TRUE.equals(userServiceWebClient.get()
         .uri("/api/users/{userId}/validate", userId)

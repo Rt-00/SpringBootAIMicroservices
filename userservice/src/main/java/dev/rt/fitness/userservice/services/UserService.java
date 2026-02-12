@@ -5,12 +5,14 @@ import dev.rt.fitness.userservice.dtos.UserResponse;
 import dev.rt.fitness.userservice.mappers.UserMapper;
 import dev.rt.fitness.userservice.models.User;
 import dev.rt.fitness.userservice.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
  * Service layer responsible for user-related business logic.
  */
 @Service
+@Slf4j
 public class UserService {
 
   private final UserRepository userRepository;
@@ -69,6 +71,7 @@ public class UserService {
    * @return {@code true} if a user with the given ID exists, otherwise {@code false}
    */
   public Boolean existsByUserId(String userId) {
+    log.info("Calling User Validation API for userID: {}", userId);
     return userRepository.existsById(userId);
   }
 }
