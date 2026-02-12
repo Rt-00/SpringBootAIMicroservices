@@ -2,6 +2,9 @@ spring:
   application:
     name: ai-service
 
+  mongodb:
+    uri: mongodb://docker:docker@localhost:27018/fitness_ai_db?authSource=admin
+
 eureka:
   client:
     service-url:

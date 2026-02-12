@@ -1,0 +1,9 @@
+package dev.rt.fitness.aiservice.configs;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+
+@Configuration
+@EnableMongoAuditing
+public class MongoConfig {
+}
