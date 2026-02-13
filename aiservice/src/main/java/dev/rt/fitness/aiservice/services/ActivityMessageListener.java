@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ActivityMessageListener {
 
+  private final ActivityAIService aiService;
+
+  public ActivityMessageListener(ActivityAIService aiService) {
+    this.aiService = aiService;
+  }
+
   /**
    * Receives and process an Activity through the Rabbit MQ.
    *
@@ -17,5 +23,6 @@ public class ActivityMessageListener {
   @RabbitListener(queues = "activity.queue")
   public void processActivity(Activity activity) {
     log.info("Received activity for procesing: {}", activity.getId());
+    log.info("Generated Recommendation: {}", aiService.generateRecommendation(activity));
   }
 }
