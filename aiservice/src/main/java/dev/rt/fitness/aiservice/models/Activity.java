@@ -21,6 +21,10 @@ public class Activity {
    */
   private String userId;
 
+  /**
+   * Type of activity;
+   */
+  private String type;
 
   /**
    * Duration of the activity in minutes.
