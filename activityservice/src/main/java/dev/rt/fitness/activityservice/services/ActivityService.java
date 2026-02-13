@@ -5,6 +5,9 @@ import dev.rt.fitness.activityservice.dtos.ActivityResponse;
 import dev.rt.fitness.activityservice.mappers.ActivityMapper;
 import dev.rt.fitness.activityservice.models.Activity;
 import dev.rt.fitness.activityservice.repository.ActivityRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,23 +15,39 @@ import java.util.List;
 /**
  * Service layer responsible for activity-related business logic.
  */
+@Slf4j
 @Service
 public class ActivityService {
 
   private final ActivityRepository activityRepository;
   private final UserValidationService userValidationService;
+  private final RabbitTemplate rabbitTemplate;
+
+  /**
+   * RabbitMQ exchange name.
+   */
+  @Value("${rabbitmq.exchange.name}")
+  private String exchange;
+
+  /**
+   * RabbitMQ routing key.
+   */
+  @Value("${rabbitmq.routing.key}")
+  private String routingKey;
 
   public ActivityService(ActivityRepository activityRepository,
-    UserValidationService userValidationService) {
+    UserValidationService userValidationService, RabbitTemplate rabbitTemplate) {
     this.activityRepository = activityRepository;
     this.userValidationService = userValidationService;
+    this.rabbitTemplate = rabbitTemplate;
   }
 
   /**
    * Tracks a new activity in the system.
    *
    * <p>This method validates the user against the user service,
-   * maps the incoming request to a domain model, persists it, and returns a response DTO.</p>
+   * maps the incoming request to a domain model, persists it, publish message in RabbitMQ with
+   * saved activity as data and returns a response DTO.</p>
    *
    * @param request activity creation data
    *
@@ -46,6 +65,13 @@ public class ActivityService {
     Activity activity = ActivityMapper.toModel(request);
 
     Activity savedActivity = activityRepository.save(activity);
+
+    // Publish to RabbitMQ for AI Processing
+    try {
+      rabbitTemplate.convertAndSend(exchange, routingKey, savedActivity);
+    } catch (Exception e) {
+      log.error("Failed to publish activity to RabbitMQ: ", e);
+    }
 
     return ActivityMapper.toResponse(savedActivity);
   }
